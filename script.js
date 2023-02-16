@@ -13,7 +13,10 @@ const winColor = '#60b347'
 const winWidth = '30rem'
 const defaultColor = '#222'
 const defaultWidth = '15rem'
-//console.log('secret number::', secretNumber);
+console.log('secret number::', secretNumber);
+function displayMessage(message) {
+    document.querySelector('.message').textContent = message
+}
 
 document.querySelector('.check').addEventListener('click', function () {
     const guess = Number(document.querySelector('.guess').value)
@@ -22,28 +25,32 @@ document.querySelector('.check').addEventListener('click', function () {
     document.querySelector('body').style.backgroundColor = defaultColor
     document.querySelector('.number').style.width = defaultWidth
     //Number(document.querySelector('.score').textContent)
-    if (!guess || guess < 1 || guess > 19) {
-        document.querySelector('.message').textContent = '⛔ Enter numbers between 1 and 20'
+
+
+    //when desired number not entered
+    if (!guess || guess < 1 || guess > 20) {
+        displayMessage('⛔ Enter numbers in the range 1-20')
+
+        //win condition
     } else if (guess === secretNumber) {
         highScore = Math.max(score, Number(document.querySelector('.highscore').textContent))
         document.querySelector('.highscore').textContent = highScore
         document.querySelector('.number').textContent = secretNumber
-        document.querySelector('.message').textContent = '🎉 Correct number!'
+        displayMessage('🎉 Correct number!')
         document.querySelector('body').style.backgroundColor = winColor
         document.querySelector('.number').style.width = winWidth
-    } else if (guess > secretNumber && score > 0) {
-        document.querySelector('.message').textContent = '📈 too high!'
+
+        //guess not equal to secret number
+    } else if (guess !== secretNumber && score > 0) {
+        displayMessage((guess > secretNumber) ? '📈 too high!' : '📉 too low!')
         score--
         console.log(score);
         document.querySelector('.score').textContent = score
-    } else if (guess < secretNumber && score > 0) {
-        document.querySelector('.message').textContent = '📉 too low!'
-        score--
-        console.log(score);
-        document.querySelector('.score').textContent = score
+
+        //lose conditon
     }
     if (score < 1) {
-        document.querySelector('.message').textContent = '😿 you lost!'
+        displayMessage('😿 you lost!')
         document.querySelector('.score').textContent = 0
     }
 })
@@ -54,9 +61,9 @@ document.querySelector('.again').addEventListener('click', function () {
     //highScore = Math.max(prevScore, highScore)
     score = 20
 
-    // console.log('secret number::', secretNumber);
+    console.log('secret number::', secretNumber);
     document.querySelector('.guess').value = ''
-    document.querySelector('.message').textContent = 'Start guessing...'
+    displayMessage('Start guessing...')
     document.querySelector('.score').textContent = score
     //document.querySelector('.highscore').textContent = highScore
     document.querySelector('.number').textContent = '?'
